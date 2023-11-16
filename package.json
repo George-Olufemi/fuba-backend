@@ -1,0 +1,37 @@
+{
+  "name": "fuba",
+  "version": "1.0.0",
+  "description": "FUBA Backend Service",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write .",
+    "postinstall": "tsc",
+    "start": "node ./dist/server.js",
+    "start:dev": "nodemon ./src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TijanAyo/FUBA_backend.git"
+  },
+  "author": "TijanAyo <https://github.com/TijanAyo>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TijanAyo/FUBA_backend/issues"
+  },
+  "homepage": "https://github.com/TijanAyo/FUBA_backend#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "nodemon": "^3.0.1",
+    "prettier": "3.1.0",
+    "typescript": "^5.2.2"
+  }
+}
