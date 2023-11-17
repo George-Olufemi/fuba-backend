@@ -6,18 +6,18 @@ const authService: AuthService = new AuthService();
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 
 class AuthController {
-  public async onboardingTutor(_req: Request, res: Response) {
+  public async onboardingTutor(req: Request, res: Response) {
     try {
-      const response = await authService.signUpAsTutor();
+      const response = await authService.signUpAsTutor(req.body);
       return res.status(201).json(response);
     } catch (err: any) {
       return await customErrorHandler.handleCustomError(err, res);
     }
   }
 
-  public async onboardingLearner(_req: Request, res: Response) {
+  public async onboardingLearner(req: Request, res: Response) {
     try {
-      const response = await authService.signUpAsLearner();
+      const response = await authService.signUpAsLearner(req.body);
       return res.status(201).json(response);
     } catch (err: any) {
       return await customErrorHandler.handleCustomError(err, res);

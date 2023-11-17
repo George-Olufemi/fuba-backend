@@ -14,3 +14,18 @@ export interface IUser extends Document {
     picture: string;
     position: Position;
 }
+
+export interface tutorsPayload {
+    fullName: string;
+    email: string;
+    picture: string;
+    password: string;
+    confirmPassword: string;
+}
+
+export interface learnersPayload {
+    fullName: string;
+    email: string;
+    password: string;
+    confirmPassword: string
+}
