@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "FUBA Backend Service",
   "main": "index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "format": "prettier --write .",
