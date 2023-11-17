@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 
 class AuthService {
 
-    public async signUpAsTutor(payload: tutorsPayload): Promise<OkResponse | BadRequestException> {
+    public async signUpAsTutor(payload: tutorsPayload): Promise<OkResponse> {
         try {
             await onboardingTutorSchema.validateAsync(payload);
             const user = await User.findOne({ email: payload.email });
@@ -40,7 +40,7 @@ class AuthService {
         }
     }
 
-    public async signUpAsLearner(payload: learnersPayload) {
+    public async signUpAsLearner(payload: learnersPayload): Promise<OkResponse> {
         try {
             await onboardingLearnerSchema.validateAsync(payload);
             const user = await User.findOne({ email: payload.email });
