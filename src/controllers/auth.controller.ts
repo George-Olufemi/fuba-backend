@@ -24,9 +24,9 @@ class AuthController {
     }
   }
 
-  public async login(_req: Request, res: Response) {
+  public async login(req: Request, res: Response) {
     try {
-      const response = await authService.signIn();
+      const response = await authService.signIn(req.body);
       return res.status(201).json(response);
     } catch (err: any) {
       return await customErrorHandler.handleCustomError(err, res);
