@@ -93,7 +93,7 @@ class AuthService {
       throw new BadRequestException({
         httpCode: Httpcode.BAD_REQUEST,
         description: 'An error occured with our mailing service, kindly try again later',
-      }); 
+      });
     }
   }
 }

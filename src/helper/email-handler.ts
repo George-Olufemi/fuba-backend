@@ -1,15 +1,14 @@
-import MailerService from "./mailer";
-import UtilsService from "./utils";
+import MailerService from './mailer';
+import UtilsService from './utils';
 
 const mailerService: MailerService = new MailerService();
 const utilsService: UtilsService = new UtilsService();
 
 class EmailHandlerService {
-
-    public async sendVerificationMail(email: string) {
-        const verificationLink = await utilsService.generateVerificationToken(email);
-        const emailSubject: string = "Action Required: Verify Your Account"
-        const emailBody: string = `
+  public async sendVerificationMail(email: string) {
+    const verificationLink = await utilsService.generateVerificationToken(email);
+    const emailSubject: string = 'Action Required: Verify Your Account';
+    const emailBody: string = `
         <div style="margin: 0px; padding: 30px; background: #f8f9fc; height: auto; box-sizing: border-box; line-height: 1.5rem; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
             <div class="header" style="height: 80px; background: #280D46; color: white">
                 <header style="padding-top: 25px; font-size: 1.9rem; font-weight: 600; text-align: center;">FUBA</header>
@@ -36,11 +35,10 @@ class EmailHandlerService {
                 </div>
             </section>
         </div>
-        `
-        await mailerService.sendVerificationMail(email, emailSubject, emailBody);
-        return true;
-    }
-
+        `;
+    await mailerService.sendVerificationMail(email, emailSubject, emailBody);
+    return true;
+  }
 }
 
 export default EmailHandlerService;
