@@ -14,3 +14,9 @@ export const onboardingLearnerSchema = joi.object({
   password: joi.string().required().min(6),
   confirmPassword: joi.string().valid(joi.ref('password')).required().strict(),
 });
+
+
+export const signInSchema = joi.object({
+  email: joi.string().required().trim(),
+  password: joi.string().required(),
+});

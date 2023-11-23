@@ -6,10 +6,11 @@ import {
   OkResponse,
   NotFoundException,
   ForbiddenException,
+  ConflictingException,
 } from '../helper';
 import { ValidationError } from 'joi';
-import { onboardingLearnerSchema, onboardingTutorSchema } from '../validations';
-import { tutorsPayload, Position, learnersPayload } from '../interface';
+import { onboardingLearnerSchema, onboardingTutorSchema, signInSchema } from '../validations';
+import { tutorsPayload, Role, learnersPayload, signInPayload } from '../interface';
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import EmailHandlerService from '../helper/email-handler';
@@ -31,7 +32,7 @@ class AuthService {
           email: payload.email,
           picture: payload.picture,
           password: hashedPassword,
-          position: Position.Tutor,
+          role: Role.Tutor,
         });
         await this.sendVerificationMail(payload.email);
         return new OkResponse('Check provided email inbox for verification mail');
@@ -62,7 +63,7 @@ class AuthService {
           fullName: payload.fullName,
           email: payload.email,
           password: hashedPassword,
-          position: Position.Learner,
+          role: Role.Learner,
         });
         await this.sendVerificationMail(payload.email);
         return new OkResponse('Check provided email inbox for verification mail');
@@ -83,8 +84,45 @@ class AuthService {
     }
   }
 
-  public async signIn(payload: any) {
-    return 'This is the login service';
+  public async signIn(payload: signInPayload) {
+    try {
+      await signInSchema.validateAsync(payload);
+      const user = await User.findOne({ email: payload.email });
+      if (!user) {
+        throw new NotFoundException({
+          httpCode: Httpcode.NOT_FOUND,
+          description: 'User with email address does not exist, check email and try again'
+        });
+      }
+      if (user.isEmailVerified != true) {
+        throw new BadRequestException({
+          httpCode: Httpcode.BAD_REQUEST,
+          description: 'Email address is not verified, kindly verify email address and try again'
+        });
+      }
+      const isPasswordValid = await this.dehashPassword(payload.password, user.password);
+      if (!isPasswordValid) {
+        throw new ConflictingException({
+          httpCode: Httpcode.CONFLICTING_ERROR,
+          description: 'Incorrect password, check password and try again'
+        });
+      }
+
+      const tokenArgs = { id: user._id, email: user.email };
+      const accessToken = await utilsService.generateAccessToken(tokenArgs);
+
+      return new OkResponse('Access token generated', {accessToken});
+
+    } catch(err:any) {
+      logger.error(err.message);
+      if (err instanceof ValidationError) {
+        throw new ValidationException({
+          httpCode: Httpcode.VALIDATION_ERROR,
+          description: err.details[0].message,
+        });
+      }
+      throw err;
+    }
   }
 
   public async verifyUserEmail(token: string): Promise<boolean> {
@@ -133,6 +171,10 @@ class AuthService {
   private async hashPassword(password: string): Promise<string> {
     const salt = Number(process.env.SALT);
     return await bcrypt.hash(password, salt);
+  }
+
+  private async dehashPassword(password: string, hashedPassword: string) {
+    return await bcrypt.compare(password, hashedPassword);
   }
 
   private async sendVerificationMail(email: string): Promise<void> {
