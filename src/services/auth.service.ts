@@ -4,6 +4,8 @@ import {
   Httpcode,
   BadRequestException,
   OkResponse,
+  NotFoundException,
+  ForbiddenException,
 } from '../helper';
 import { ValidationError } from 'joi';
 import { onboardingLearnerSchema, onboardingTutorSchema } from '../validations';
@@ -11,8 +13,11 @@ import { tutorsPayload, Position, learnersPayload } from '../interface';
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import EmailHandlerService from '../helper/email-handler';
+import UtilsService from '../helper/utils';
+import { JwtPayload } from 'jsonwebtoken';
 
 const emailHandler: EmailHandlerService = new EmailHandlerService();
+const utilsService: UtilsService = new UtilsService();
 
 class AuthService {
   public async signUpAsTutor(payload: tutorsPayload): Promise<OkResponse> {
@@ -59,7 +64,7 @@ class AuthService {
           password: hashedPassword,
           position: Position.Learner,
         });
-        await emailHandler.sendVerificationMail(payload.email);
+        await this.sendVerificationMail(payload.email);
         return new OkResponse('Check provided email inbox for verification mail');
       }
       throw new BadRequestException({
@@ -80,6 +85,49 @@ class AuthService {
 
   public async signIn(payload: any) {
     return 'This is the login service';
+  }
+
+  public async verifyUserEmail(token: string): Promise<boolean> {
+    try {
+      const userToken = (await utilsService.validateVerificationToken(token)) as JwtPayload;
+      if (Date.now() > userToken.exp! * 1000) {
+        throw new BadRequestException({
+          httpCode: Httpcode.BAD_REQUEST,
+          description: 'Token expired, kindly request for another verification link',
+        });
+      }
+      const user = await User.findOne({ email: userToken.email });
+      if (!user) {
+        throw new NotFoundException({
+          httpCode: Httpcode.NOT_FOUND,
+          description: 'User was not found'
+        });
+      }
+      if (user.isEmailVerified == true) {
+        throw new ForbiddenException({
+          httpCode: Httpcode.FORBIDDEN,
+          description: 'This email address has been validated'
+        });
+      }
+
+      await User.findOneAndUpdate(
+        { email: userToken.email },
+        { isEmailVerified: true },
+        { new: true }
+      );
+      
+      return true;
+
+    } catch(err:any) {
+      logger.error(err.message);
+      if (err instanceof ValidationError) {
+        throw new ValidationException({
+          httpCode: Httpcode.VALIDATION_ERROR,
+          description: err.details[0].message,
+        });
+      }
+      throw err;
+    }
   }
 
   private async hashPassword(password: string): Promise<string> {

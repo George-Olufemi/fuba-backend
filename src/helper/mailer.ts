@@ -1,6 +1,8 @@
+import * as dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
 import { logger } from './logger';
 
+dotenv.config();
 class MailerService {
   private transporter: nodemailer.Transporter;
 
@@ -22,7 +24,7 @@ class MailerService {
   ): Promise<void> {
     try {
       const mailOptions: nodemailer.SendMailOptions = {
-        from: `"Emmanuel From HelpAI" ${process.env.SMTP_SENDER}`,
+        from: `"Lekzzicon From FUBA" ${process.env.SMTP_SENDER}`,
         to,
         subject,
         html,
