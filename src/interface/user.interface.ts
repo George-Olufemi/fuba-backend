@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-export enum Position {
+export enum Role {
   Tutor = 'Tutor',
   Learner = 'Learner',
 }
@@ -12,7 +12,7 @@ export interface IUser extends Document {
   isEmailVerified: boolean;
   password: string;
   picture: string;
-  position: Position;
+  role: Role;
 }
 
 export interface tutorsPayload {
@@ -28,4 +28,9 @@ export interface learnersPayload {
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+export interface signInPayload {
+  email: string;
+  password: string;
 }
