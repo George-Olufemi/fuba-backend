@@ -17,7 +17,15 @@ const connectDB = async (): Promise<void> => {
   }
 };
 
-app.listen(PORT, () => {
+/* app.listen(PORT, () => {
   logger.info(`Local server running on: http://localhost:${PORT}`);
   connectDB();
+}); */
+
+connectDB().then(() => {
+  app.listen(PORT, (): void => {
+    isLocal
+      ? logger.info(`Local server running on http://localhost:${PORT}`)
+      : logger.info(`Server running on prod`);
+  });
 });
