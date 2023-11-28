@@ -1,5 +1,10 @@
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
-import { InternalServerException, Httpcode, BadRequestException, ConflictingException } from './error-handler';
+import {
+  InternalServerException,
+  Httpcode,
+  BadRequestException,
+  ConflictingException,
+} from './error-handler';
 import { logger } from './logger';
 import * as dotenv from 'dotenv';
 import { Types } from 'mongoose';
@@ -42,7 +47,9 @@ class UtilsService {
     }
   }
 
-  public async validateVerificationToken(token: string): Promise<string | jwt.JwtPayload> {
+  public async validateVerificationToken(
+    token: string,
+  ): Promise<string | jwt.JwtPayload> {
     try {
       const jwtSecret = process.env.JWT_SECRET as string;
       const decoded = jwt.verify(token, jwtSecret);
@@ -52,7 +59,7 @@ class UtilsService {
       if (err instanceof TokenExpiredError) {
         throw new BadRequestException({
           httpCode: Httpcode.BAD_REQUEST,
-          description: 'Token has expired'
+          description: 'Token has expired',
         });
       }
       throw new InternalServerException({
@@ -79,15 +86,13 @@ class UtilsService {
         });
       }
       return token;
-
-    } catch(err: any) {
+    } catch (err: any) {
       logger.error(err.message);
       throw new InternalServerException({
         httpCode: Httpcode.INTERNAL_SERVER_ERROR,
         description: 'An unexpected error occured, try again in two minutes',
       });
     }
-    
   }
 }
 

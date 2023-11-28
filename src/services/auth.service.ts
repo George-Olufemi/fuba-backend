@@ -9,7 +9,11 @@ import {
   ConflictingException,
 } from '../helper';
 import { ValidationError } from 'joi';
-import { onboardingLearnerSchema, onboardingTutorSchema, signInSchema } from '../validations';
+import {
+  onboardingLearnerSchema,
+  onboardingTutorSchema,
+  signInSchema,
+} from '../validations';
 import { tutorsPayload, Role, learnersPayload, signInPayload } from '../interface';
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
@@ -91,29 +95,30 @@ class AuthService {
       if (!user) {
         throw new NotFoundException({
           httpCode: Httpcode.NOT_FOUND,
-          description: 'User with email address does not exist, check email and try again'
+          description:
+            'User with email address does not exist, check email and try again',
         });
       }
       if (user.isEmailVerified != true) {
         throw new BadRequestException({
           httpCode: Httpcode.BAD_REQUEST,
-          description: 'Email address is not verified, kindly verify email address and try again'
+          description:
+            'Email address is not verified, kindly verify email address and try again',
         });
       }
       const isPasswordValid = await this.dehashPassword(payload.password, user.password);
       if (!isPasswordValid) {
         throw new ConflictingException({
           httpCode: Httpcode.CONFLICTING_ERROR,
-          description: 'Incorrect password, check password and try again'
+          description: 'Incorrect password, check password and try again',
         });
       }
 
       const tokenArgs = { id: user._id, email: user.email };
       const accessToken = await utilsService.generateAccessToken(tokenArgs);
 
-      return new OkResponse('Access token generated', {accessToken});
-
-    } catch(err:any) {
+      return new OkResponse('Access token generated', { accessToken });
+    } catch (err: any) {
       logger.error(err.message);
       if (err instanceof ValidationError) {
         throw new ValidationException({
@@ -127,7 +132,9 @@ class AuthService {
 
   public async verifyUserEmail(token: string): Promise<boolean> {
     try {
-      const userToken = (await utilsService.validateVerificationToken(token)) as JwtPayload;
+      const userToken = (await utilsService.validateVerificationToken(
+        token,
+      )) as JwtPayload;
       if (Date.now() > userToken.exp! * 1000) {
         throw new BadRequestException({
           httpCode: Httpcode.BAD_REQUEST,
@@ -138,25 +145,24 @@ class AuthService {
       if (!user) {
         throw new NotFoundException({
           httpCode: Httpcode.NOT_FOUND,
-          description: 'User was not found'
+          description: 'User was not found',
         });
       }
       if (user.isEmailVerified == true) {
         throw new ForbiddenException({
           httpCode: Httpcode.FORBIDDEN,
-          description: 'This email address has been validated'
+          description: 'This email address has been validated',
         });
       }
 
       await User.findOneAndUpdate(
         { email: userToken.email },
         { isEmailVerified: true },
-        { new: true }
+        { new: true },
       );
-      
-      return true;
 
-    } catch(err:any) {
+      return true;
+    } catch (err: any) {
       logger.error(err.message);
       if (err instanceof ValidationError) {
         throw new ValidationException({
