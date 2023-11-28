@@ -117,7 +117,7 @@ class AuthService {
       const tokenArgs = { id: user._id, email: user.email };
       const accessToken = await utilsService.generateAccessToken(tokenArgs);
 
-      return new OkResponse('Access token generated', { accessToken });
+      return new OkResponse('User role and access token provided', { role: user.role, accessToken });
     } catch (err: any) {
       logger.error(err.message);
       if (err instanceof ValidationError) {
