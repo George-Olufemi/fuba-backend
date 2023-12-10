@@ -18,11 +18,11 @@ import { tutorsPayload, Role, learnersPayload, signInPayload } from '../interfac
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import EmailHandlerService from '../helper/email-handler';
-import UtilsService from '../helper/utils';
+import TokenService from '../helper/token';
 import { JwtPayload } from 'jsonwebtoken';
 
 const emailHandler: EmailHandlerService = new EmailHandlerService();
-const utilsService: UtilsService = new UtilsService();
+const tokenService: TokenService = new TokenService();
 
 class AuthService {
   public async signUpAsTutor(payload: tutorsPayload): Promise<OkResponse> {
@@ -115,7 +115,7 @@ class AuthService {
       }
 
       const tokenArgs = { id: user._id, email: user.email };
-      const accessToken = await utilsService.generateAccessToken(tokenArgs);
+      const accessToken = await tokenService.generateAccessToken(tokenArgs);
 
       return new OkResponse('User role and access token provided', { role: user.role, accessToken });
     } catch (err: any) {
@@ -132,7 +132,7 @@ class AuthService {
 
   public async verifyUserEmail(token: string): Promise<boolean> {
     try {
-      const userToken = (await utilsService.validateVerificationToken(
+      const userToken = (await tokenService.validateVerificationToken(
         token,
       )) as JwtPayload;
       if (Date.now() > userToken.exp! * 1000) {

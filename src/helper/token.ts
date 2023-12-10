@@ -18,7 +18,7 @@ interface TokenArgs {
   email: string;
 }
 
-class UtilsService {
+class TokenService {
   public async generateVerificationToken(email: string): Promise<string> {
     try {
       const jwtSecret = process.env.JWT_SECRET as string;
@@ -96,4 +96,4 @@ class UtilsService {
   }
 }
 
-export default UtilsService;
+export default TokenService;

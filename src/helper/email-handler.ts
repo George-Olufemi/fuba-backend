@@ -1,12 +1,12 @@
 import MailerService from './mailer';
-import UtilsService from './utils';
+import TokenService from './token';
 
 const mailerService: MailerService = new MailerService();
-const utilsService: UtilsService = new UtilsService();
+const tokenService: TokenService = new TokenService();
 
 class EmailHandlerService {
   public async sendVerificationMail(email: string) {
-    const verificationLink = await utilsService.generateVerificationToken(email);
+    const verificationLink = await tokenService.generateVerificationToken(email);
     const emailSubject: string = 'Action Required: Verify Your Account';
     const emailBody: string = `
         <div style="margin: 0px; padding: 30px; background: #f8f9fc; height: auto; box-sizing: border-box; line-height: 1.5rem; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
