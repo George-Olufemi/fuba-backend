@@ -119,7 +119,10 @@ class AuthService {
       const tokenArgs = { id: user._id, email: user.email };
       const accessToken = await tokenService.generateAccessToken(tokenArgs);
 
-      return new OkResponse('User role and access token provided', { role: user.role, accessToken });
+      return new OkResponse('User role and access token provided', {
+        role: user.role,
+        accessToken,
+      });
     } catch (err: any) {
       logger.error(err.message);
       if (err instanceof ValidationError) {
