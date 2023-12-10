@@ -31,15 +31,17 @@ class AuthService {
       const user = await User.findOne({ email: payload.email });
       if (!user) {
         const hashedPassword = await this.hashPassword(payload.password);
-        await User.create({
+        const newUser = await User.create({
           fullName: payload.fullName,
           email: payload.email,
           picture: payload.picture,
           password: hashedPassword,
           role: Role.Tutor,
         });
-        await this.sendVerificationMail(payload.email);
-        return new OkResponse('Check provided email inbox for verification mail');
+        if (newUser) {
+          await this.sendVerificationMail(payload.email);
+          return new OkResponse('Check provided email inbox for verification mail');
+        }
       }
       throw new BadRequestException({
         httpCode: Httpcode.BAD_REQUEST,
