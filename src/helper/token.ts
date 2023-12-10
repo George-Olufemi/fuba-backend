@@ -11,7 +11,7 @@ import { Types } from 'mongoose';
 dotenv.config();
 
 const isLocalEnv = process.env.NODE_ENV === 'Develop';
-const url = isLocalEnv ? 'http://localhost:8080' : process.env.BASE_URL || '';
+const url = isLocalEnv ? 'http://localhost:8070' : process.env.BASE_URL || '';
 
 interface TokenArgs {
   id: Types.ObjectId;
