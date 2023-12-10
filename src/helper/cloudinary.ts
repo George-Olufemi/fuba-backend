@@ -18,7 +18,7 @@ class CloudinaryService {
     folder: string,
     options: uploadOptions,
   ) {
-    options.public_id = folder + '/' + options.public_id; // Images/{{randomFileName}}
+    options.public_id = folder + '/' + options.public_id;
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
         if (error) {
