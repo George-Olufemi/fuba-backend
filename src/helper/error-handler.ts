@@ -19,8 +19,8 @@ class NotFoundException extends Error {
   statusCode: number;
 
   constructor(args: ErrorMsgArgs) {
-    super(args.description);
-    this.name = 'Notfound Error';
+    super(args.description,);
+    this.name = 'NOT_FOUND';
     this.statusCode = Httpcode.NOT_FOUND;
   }
 }
@@ -30,7 +30,7 @@ class UnauthorizedException extends Error {
 
   constructor(args: ErrorMsgArgs) {
     super(args.description);
-    this.name = 'Unauthorized Error';
+    this.name = 'UNAUTHORIZED';
     this.statusCode = Httpcode.UNAUTHORIZED;
   }
 }
@@ -40,7 +40,7 @@ class InternalServerException extends Error {
 
   constructor(args: ErrorMsgArgs) {
     super(args.description);
-    this.name = 'InternalServer Error';
+    this.name = 'INTERNAL_SERVER_ERROR';
     this.statusCode = Httpcode.INTERNAL_SERVER_ERROR;
   }
 }
@@ -50,7 +50,7 @@ class BadRequestException extends Error {
 
   constructor(args: ErrorMsgArgs) {
     super(args.description);
-    this.name = 'BadRequest Error';
+    this.name = 'BAD_REQUEST';
     this.statusCode = Httpcode.BAD_REQUEST;
   }
 }
@@ -60,7 +60,7 @@ class ForbiddenException extends Error {
 
   constructor(args: ErrorMsgArgs) {
     super(args.description);
-    this.name = 'Forbidden Error';
+    this.name = 'FORBIDDEN';
     this.statusCode = Httpcode.FORBIDDEN;
   }
 }
@@ -70,7 +70,7 @@ class ConflictingException extends Error {
 
   constructor(args: ErrorMsgArgs) {
     super(args.description);
-    this.name = 'Conflicting Error';
+    this.name = 'CONFLICTING';
     this.statusCode = Httpcode.CONFLICTING_ERROR;
   }
 }
@@ -80,7 +80,7 @@ class ValidationException extends Error {
 
   constructor(args: ErrorMsgArgs) {
     super(args.description);
-    this.name = 'Validation Error';
+    this.name = 'VALIDATION_ERROR';
     this.statusCode = Httpcode.VALIDATION_ERROR;
   }
 }
