@@ -1,5 +1,6 @@
 import { logger, InternalServerException, Httpcode } from '../helper';
 import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 
 class Utils {
   public async randomFileName() {
@@ -17,6 +18,15 @@ class Utils {
         description: 'Something unexpected happened... Try again in a few minute',
       });
     }
+  }
+
+  public async hashPayload(payload: string): Promise<string> {
+    const salt = Number(process.env.SALT);
+    return await bcrypt.hash(payload, salt);
+  }
+
+  public async dehashPayload(payload: string, hashedPayload: string) {
+    return await bcrypt.compare(payload, hashedPayload);
   }
 }
 

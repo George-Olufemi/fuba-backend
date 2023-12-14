@@ -16,13 +16,14 @@ import {
 } from '../validations';
 import { tutorsPayload, Role, learnersPayload, signInPayload } from '../interface';
 import User from '../models/user.model';
-import bcrypt from 'bcrypt';
 import EmailHandlerService from '../helper/email-handler';
 import TokenService from '../helper/token';
 import { JwtPayload } from 'jsonwebtoken';
+import Utils from '../utils/utils';
 
 const emailHandler: EmailHandlerService = new EmailHandlerService();
 const tokenService: TokenService = new TokenService();
+const utilsService: Utils = new Utils();
 
 class AuthService {
   public async signUpAsTutor(payload: tutorsPayload): Promise<OkResponse> {
@@ -30,7 +31,7 @@ class AuthService {
       await onboardingTutorSchema.validateAsync(payload);
       const user = await User.findOne({ email: payload.email });
       if (!user) {
-        const hashedPassword = await this.hashPassword(payload.password);
+        const hashedPassword = await utilsService.hashPayload(payload.password);
         const newUser = await User.create({
           fullName: payload.fullName,
           email: payload.email,
@@ -64,7 +65,7 @@ class AuthService {
       await onboardingLearnerSchema.validateAsync(payload);
       const user = await User.findOne({ email: payload.email });
       if (!user) {
-        const hashedPassword = await this.hashPassword(payload.password);
+        const hashedPassword = await utilsService.hashPayload(payload.password);
         await User.create({
           fullName: payload.fullName,
           email: payload.email,
@@ -108,7 +109,7 @@ class AuthService {
             'Email address is not verified, kindly verify email address and try again',
         });
       }
-      const isPasswordValid = await this.dehashPassword(payload.password, user.password);
+      const isPasswordValid = await utilsService.dehashPayload(payload.password, user.password);
       if (!isPasswordValid) {
         throw new ConflictingException({
           httpCode: Httpcode.CONFLICTING_ERROR,
@@ -177,15 +178,6 @@ class AuthService {
       }
       throw err;
     }
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    const salt = Number(process.env.SALT);
-    return await bcrypt.hash(password, salt);
-  }
-
-  private async dehashPassword(password: string, hashedPassword: string) {
-    return await bcrypt.compare(password, hashedPassword);
   }
 
   private async sendVerificationMail(email: string): Promise<void> {
