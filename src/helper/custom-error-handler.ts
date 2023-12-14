@@ -15,45 +15,52 @@ import { logger } from './logger';
 class CustomErrorHandler {
   async handleCustomError(err: any, res: Response) {
     if (err instanceof NotFoundException) {
-      return res.status(Httpcode.NOT_FOUND).json({
-        StatusCode: err.statusCode,
-        Message: err.message,
+      return res.status(err.statusCode).json({
+        status: false,
+        error: 'NOT_FOUND',
+        message: err.message,
       });
     }
     if (err instanceof BadRequestException) {
       return res.status(err.statusCode).json({
-        StatusCode: err.statusCode,
-        Message: err.message,
+        status: false,
+        error: 'BAD_REQUEST',
+        message: err.message,
       });
     }
     if (err instanceof InternalServerException) {
-      return res.status(Httpcode.INTERNAL_SERVER_ERROR).json({
-        StatusCode: err.statusCode,
-        Message: err.message,
+      return res.status(err.statusCode).json({
+        status: false,
+        error: 'INTERNAL_SERVER_ERROR',
+        message: err.message,
       });
     }
     if (err instanceof UnauthorizedException) {
-      return res.status(Httpcode.UNAUTHORIZED).json({
-        StatusCode: err.statusCode,
-        Message: err.message,
+      return res.status(err.statusCode).json({
+        status: false,
+        error: 'UNAUTHORIZED',
+        message: err.message,
       });
     }
     if (err instanceof ForbiddenException) {
-      return res.status(Httpcode.FORBIDDEN).json({
-        StatusCode: err.statusCode,
-        Message: err.message,
+      return res.status(err.statusCode).json({
+        status: false,
+        error: 'FORBIDDEN_ERROR',
+        message: err.message,
       });
     }
     if (err instanceof ConflictingException) {
-      return res.status(Httpcode.CONFLICTING_ERROR).json({
-        StatusCode: err.statusCode,
-        Message: err.message,
+      return res.status(err.statusCode).json({
+        status: false,
+        error: 'CONFLICTING_ERROR',
+        message: err.message,
       });
     }
     if (err instanceof ValidationException) {
-      return res.status(Httpcode.VALIDATION_ERROR).json({
-        StatusCode: err.statusCode,
-        Message: err.message,
+      return res.status(err.statusCode).json({
+        status: false,
+        error: 'VALIDATION_ERROR',
+        message: err.message,
       });
     }
     if (err instanceof RedirectException) {
@@ -62,8 +69,9 @@ class CustomErrorHandler {
     // If the error is not one of the custom error classes, handle it as a generic internal server error
     logger.error(err);
     return res.status(Httpcode.INTERNAL_SERVER_ERROR).json({
-      StatusCode: Httpcode.INTERNAL_SERVER_ERROR,
-      Message: 'An error occurred while processing your request. Please try again later.',
+      status: false,
+      error: 'INTERNAL_SERVER_ERROR',
+      message: 'An error occurred while processing your request. Please try again later.',
     });
   }
 }

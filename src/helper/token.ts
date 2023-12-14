@@ -24,26 +24,19 @@ class TokenService {
       const jwtSecret = process.env.JWT_SECRET as string;
       const TTL = '20min';
       if (!jwtSecret) {
-        throw new InternalServerException({
-          httpCode: Httpcode.INTERNAL_SERVER_ERROR,
-          description: 'JWT secret is not configured',
-        });
+        throw new InternalServerException('JWT secret is not configured');
       }
       const token = jwt.sign({ email }, jwtSecret, { expiresIn: TTL });
       if (!token) {
-        throw new BadRequestException({
-          httpCode: Httpcode.BAD_REQUEST,
-          description: 'Failed to generate verification token',
-        });
+        throw new BadRequestException('Failed to generate verification token');
       }
       const verificationLink = `${url}/api/auth/activate-account/${token}`;
       return verificationLink;
     } catch (err: any) {
       logger.error(err.message);
-      throw new InternalServerException({
-        httpCode: Httpcode.INTERNAL_SERVER_ERROR,
-        description: 'An unexpected error occured, try again in two minutes',
-      });
+      throw new InternalServerException(
+        'An unexpected error occured, try again in two minutes',
+      );
     }
   }
 
@@ -57,15 +50,11 @@ class TokenService {
     } catch (err: any) {
       logger.error(`Failed to validate token: ${err.message}`);
       if (err instanceof TokenExpiredError) {
-        throw new BadRequestException({
-          httpCode: Httpcode.BAD_REQUEST,
-          description: 'Token has expired',
-        });
+        throw new BadRequestException('Token has expired');
       }
-      throw new InternalServerException({
-        httpCode: Httpcode.INTERNAL_SERVER_ERROR,
-        description: 'An unexpected error occured, try again in two minutes',
-      });
+      throw new InternalServerException(
+        'An unexpected error occured, try again in two minutes',
+      );
     }
   }
 
@@ -73,25 +62,18 @@ class TokenService {
     try {
       const jwtSecret = process.env.JWT_SECRET as string;
       if (!jwtSecret) {
-        throw new InternalServerException({
-          httpCode: Httpcode.INTERNAL_SERVER_ERROR,
-          description: 'JWT secret is not configured',
-        });
+        throw new InternalServerException('JWT secret is not configured');
       }
       const token = jwt.sign(tokenArg, jwtSecret, { expiresIn: '60min' });
       if (!token) {
-        throw new ConflictingException({
-          httpCode: Httpcode.CONFLICTING_ERROR,
-          description: 'Failed to generate token',
-        });
+        throw new ConflictingException('Failed to generate token');
       }
       return token;
     } catch (err: any) {
       logger.error(err.message);
-      throw new InternalServerException({
-        httpCode: Httpcode.INTERNAL_SERVER_ERROR,
-        description: 'An unexpected error occured, try again in two minutes',
-      });
+      throw new InternalServerException(
+        'An unexpected error occured, try again in two minutes',
+      );
     }
   }
 }

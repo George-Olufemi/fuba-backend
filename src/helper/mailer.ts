@@ -17,11 +17,7 @@ class MailerService {
     });
   }
 
-  public async sendMail(
-    to: string,
-    subject: string,
-    html: string,
-  ): Promise<void> {
+  public async sendMail(to: string, subject: string, html: string): Promise<void> {
     try {
       const mailOptions: nodemailer.SendMailOptions = {
         from: `"FUBA" ${process.env.SMTP_SENDER}`,

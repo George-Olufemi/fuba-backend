@@ -10,7 +10,6 @@ const app: Express = express();
 /* Routes */
 import AuthRoute from './routes/auth.route';
 
-
 /* Express Middleware */
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -33,8 +32,8 @@ app.get('/api/health', (_req: Request, res: Response) => {
 app.get('*', (_req: Request, res: Response) => {
   res.status(404).json({
     status: false,
-    error: "Route not found",
-    message: "The provided route can't be located, check request query and try again."
+    error: 'Route not found',
+    message: "The provided route can't be located, check request query and try again.",
   });
 });
 
