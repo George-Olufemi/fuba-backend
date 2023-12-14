@@ -36,7 +36,7 @@ class EmailHandlerService {
             </section>
         </div>
         `;
-    await mailerService.sendVerificationMail(email, emailSubject, emailBody);
+    await mailerService.sendMail(email, emailSubject, emailBody);
     return true;
   }
 }

@@ -25,7 +25,7 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.get('/api/health', (_req: Request, res: Response) => {
   res.status(200);
-  return res.json(new OkResponse('Okay'));
+  return res.json(new OkResponse('Server is active'));
 });
 
 app.get('*', (_req: Request, res: Response) => {

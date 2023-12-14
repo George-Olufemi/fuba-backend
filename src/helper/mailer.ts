@@ -17,14 +17,14 @@ class MailerService {
     });
   }
 
-  public async sendVerificationMail(
+  public async sendMail(
     to: string,
     subject: string,
     html: string,
   ): Promise<void> {
     try {
       const mailOptions: nodemailer.SendMailOptions = {
-        from: `"Lekzzicon From FUBA" ${process.env.SMTP_SENDER}`,
+        from: `"FUBA" ${process.env.SMTP_SENDER}`,
         to,
         subject,
         html,
