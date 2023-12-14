@@ -18,9 +18,8 @@ interface ErrorMsgArgs {
 class NotFoundException extends Error {
   statusCode: number;
 
-  constructor(args: ErrorMsgArgs) {
-    super(args.description);
-    this.name = 'Notfound Error';
+  constructor(message: string) {
+    super(message);
     this.statusCode = Httpcode.NOT_FOUND;
   }
 }
@@ -28,9 +27,8 @@ class NotFoundException extends Error {
 class UnauthorizedException extends Error {
   statusCode: number;
 
-  constructor(args: ErrorMsgArgs) {
-    super(args.description);
-    this.name = 'Unauthorized Error';
+  constructor(message: string) {
+    super(message);
     this.statusCode = Httpcode.UNAUTHORIZED;
   }
 }
@@ -38,9 +36,8 @@ class UnauthorizedException extends Error {
 class InternalServerException extends Error {
   statusCode: number;
 
-  constructor(args: ErrorMsgArgs) {
-    super(args.description);
-    this.name = 'InternalServer Error';
+  constructor(message: string) {
+    super(message);
     this.statusCode = Httpcode.INTERNAL_SERVER_ERROR;
   }
 }
@@ -48,9 +45,8 @@ class InternalServerException extends Error {
 class BadRequestException extends Error {
   statusCode: number;
 
-  constructor(args: ErrorMsgArgs) {
-    super(args.description);
-    this.name = 'BadRequest Error';
+  constructor(message: string) {
+    super(message);
     this.statusCode = Httpcode.BAD_REQUEST;
   }
 }
@@ -58,9 +54,8 @@ class BadRequestException extends Error {
 class ForbiddenException extends Error {
   statusCode: number;
 
-  constructor(args: ErrorMsgArgs) {
-    super(args.description);
-    this.name = 'Forbidden Error';
+  constructor(message: string) {
+    super(message);
     this.statusCode = Httpcode.FORBIDDEN;
   }
 }
@@ -68,9 +63,8 @@ class ForbiddenException extends Error {
 class ConflictingException extends Error {
   statusCode: number;
 
-  constructor(args: ErrorMsgArgs) {
-    super(args.description);
-    this.name = 'Conflicting Error';
+  constructor(message: string) {
+    super(message);
     this.statusCode = Httpcode.CONFLICTING_ERROR;
   }
 }
@@ -78,9 +72,8 @@ class ConflictingException extends Error {
 class ValidationException extends Error {
   statusCode: number;
 
-  constructor(args: ErrorMsgArgs) {
-    super(args.description);
-    this.name = 'Validation Error';
+  constructor(message: string) {
+    super(message);
     this.statusCode = Httpcode.VALIDATION_ERROR;
   }
 }

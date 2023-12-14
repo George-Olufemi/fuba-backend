@@ -1,36 +1,40 @@
 import express, { Express, Request, Response } from 'express';
-import morgan from 'morgan';
 import * as dotenv from 'dotenv';
-import { OkResponse } from './helper';
-
-// Routes
-import AuthRoute from './routes/auth.route';
-
 dotenv.config();
+import morgan from 'morgan';
+import { OkResponse } from './helper';
+import mongoSanitize from 'express-mongo-sanitize';
 
 const app: Express = express();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+/* Routes */
+import AuthRoute from './routes/auth.route';
+
+/* Express Middleware */
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(morgan('dev'));
+
+/* NoSQL injection middleware */
+app.use(mongoSanitize());
 
 app.use('/api/auth', AuthRoute);
 
 // Default Route
-app.get('/', (_req: Request, res: Response) => {
-  res.status(200);
-  return res.json(new OkResponse('FUBA V1.0.0'));
+app.get('/api', (_req: Request, res: Response) => {
+  return res.status(200).json(new OkResponse('FUBA backend service'));
 });
 
 app.get('/api/health', (_req: Request, res: Response) => {
-  res.status(200);
-  return res.json(new OkResponse('Okay'));
+  return res.status(200).json(new OkResponse('Server is active'));
 });
 
 app.get('*', (_req: Request, res: Response) => {
-  res.status(404);
-  return res.json(new OkResponse('Route not found'));
+  res.status(404).json({
+    status: false,
+    error: 'Route not found',
+    message: "The provided route can't be located, check request query and try again.",
+  });
 });
 
 export default app;

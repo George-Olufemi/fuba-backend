@@ -1,13 +1,27 @@
 import express from 'express';
-import AuthController from '../controllers/auth.controller';
+import multer from 'multer';
+
+import SignInController from '../controllers/Auth/signin.controller';
+import VerifyEmailController from '../controllers/Auth/verifyEmail.controller';
+import RegisterController from '../controllers/Auth/register.controller';
 
 const router = express.Router();
-const authController: AuthController = new AuthController();
 
-router.post('/registerAsTutor', authController.onboardingTutor);
-router.post('/registerAsLearner', authController.onboardingLearner);
-router.get('/activate-account/:userToken', authController.verifyUserEmail);
+const registerController: RegisterController = new RegisterController();
+const signInController: SignInController = new SignInController();
+const verifyEmailController: VerifyEmailController = new VerifyEmailController();
 
-router.post('/login', authController.login);
+const storage: multer.StorageEngine = multer.memoryStorage();
+const upload: multer.Multer = multer({ storage: storage });
+
+router.post(
+  '/registerAsTutor',
+  upload.single('picture'),
+  registerController.onboardingTutor,
+);
+router.post('/registerAsLearner', registerController.onboardingLearner);
+router.get('/activate-account/:userToken', verifyEmailController.verifyUserEmail);
+
+router.post('/login', signInController.login);
 
 export default router;
