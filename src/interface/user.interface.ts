@@ -13,6 +13,7 @@ export interface IUser extends Document {
   password: string;
   picture: string;
   role: Role;
+  course: Types.ObjectId;
 }
 
 export interface tutorsPayload {

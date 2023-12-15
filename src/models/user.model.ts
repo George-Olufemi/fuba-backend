@@ -27,6 +27,10 @@ const UserSchema: Schema<IUser> = new Schema<IUser>(
       type: String,
       required: true,
     },
+    course: {
+      type: Schema.Types.ObjectId,
+      ref: 'Course'
+    }
   },
   { timestamps: true },
 );

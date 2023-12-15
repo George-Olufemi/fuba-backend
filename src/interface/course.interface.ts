@@ -36,7 +36,17 @@ export interface ICourse extends Document {
     difficulty: Difficulty;
     rating: number;
     number_of_enrolled: number;
-    course_category: string [];
+    course_category: Category [];
+    sections: ISection[];
+    user: Types.ObjectId;
+}
+
+export interface createCoursePayload {
+    course_title: string;
+    course_description: string;
+    course_image: string;
+    difficulty: Difficulty;
+    course_category: Category[];
     sections: ISection[];
 }
 

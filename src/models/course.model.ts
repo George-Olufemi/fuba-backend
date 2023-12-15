@@ -11,8 +11,8 @@ const ModuleSchema = new Schema<IModule>({
 
 const SectionSchema = new Schema<ISection>({
     modules: { 
-        type: [ModuleSchema], 
-        default: [] 
+        type: [ModuleSchema],
+        default: null
     },
 });
 
@@ -51,12 +51,17 @@ const CourseSchema: Schema<ICourse> = new Schema<ICourse> (
         },
         sections: {
             type: [SectionSchema],
-            default: []
-        }
+            default: null
+        },
+        user: { 
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true 
+        },
 
     },
     { timestamps: true },
 )
 
-const course = mongoose.model<ICourse>('User', CourseSchema);
+const course = mongoose.model<ICourse>('Course', CourseSchema);
 export default course;
