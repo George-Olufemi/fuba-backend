@@ -9,7 +9,7 @@ class ProfileService {
         const user = await User.findById({ _id: userID }).select(omittedFields);
         if (!user)  throw new NotFoundException('User with provided ID was not found');
         try {
-            return new OkResponse('Profile information generated', user);
+            return new OkResponse('Profile Information', user);
         } catch(err:any) {
             logger.error(err.message);  
             throw err;
