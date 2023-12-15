@@ -9,6 +9,7 @@ const app: Express = express();
 
 /* Routes */
 import AuthRoute from './routes/auth.route';
+import AccountRoute from './routes/account.route';
 
 /* Express Middleware */
 app.use(express.json({ limit: '10kb' }));
@@ -19,6 +20,7 @@ app.use(morgan('dev'));
 app.use(mongoSanitize());
 
 app.use('/api/auth', AuthRoute);
+app.use('/api/account', AccountRoute);
 
 // Default Route
 app.get('/api', (_req: Request, res: Response) => {
