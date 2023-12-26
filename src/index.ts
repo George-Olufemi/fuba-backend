@@ -9,6 +9,7 @@ const app: Express = express();
 
 /* Routes */
 import AuthRoute from './routes/auth.route';
+import AccountRoute from './routes/account.route';
 
 /* Express Middleware */
 app.use(express.json({ limit: '10kb' }));
@@ -19,6 +20,7 @@ app.use(morgan('dev'));
 app.use(mongoSanitize());
 
 app.use('/api/auth', AuthRoute);
+app.use('/api/account', AccountRoute);
 
 // Default Route
 app.get('/api', (_req: Request, res: Response) => {
@@ -29,7 +31,10 @@ app.get('/api/health', (_req: Request, res: Response) => {
   return res.status(200).json(new OkResponse('Server is active'));
 });
 
-app.get('*', (_req: Request, res: Response) => {
+app.use('*', (_req: Request, res: Response) => {
+  return res
+    .status(404)
+    .json(new OkResponse('Route not found, check request query and re-try.'));
   res.status(404).json({
     status: false,
     error: 'Route not found',

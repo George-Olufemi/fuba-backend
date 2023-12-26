@@ -1,6 +1,5 @@
 import {
   NotFoundException,
-  Httpcode,
   BadRequestException,
   ConflictingException,
   OkResponse,
@@ -19,21 +18,18 @@ const tokenService: TokenService = new TokenService();
 
 class SignInService {
   public async signIn(payload: signInPayload) {
+    const omittedFields: string = '-createdAt -updatedAt -__v -picture';
     try {
       await signInSchema.validateAsync(payload);
 
-      const user = await User.findOne({ email: payload.email });
+      const user = await User.findOne({ email: payload.email }).select(omittedFields);
 
       if (!user) {
-        throw new NotFoundException(
-          'User with email address does not exist, check email and try again.',
-        );
+        throw new NotFoundException('User not found, check email and try again.');
       }
 
       if (!user.isEmailVerified) {
-        throw new BadRequestException(
-          'Email address is not verified, kindly verify email address and try again.',
-        );
+        throw new BadRequestException('Email address is not verified');
       }
 
       const isPasswordValid = await utilsService.dehashPayload(
@@ -43,22 +39,24 @@ class SignInService {
 
       if (!isPasswordValid) {
         throw new ConflictingException(
-          'Incorrect password, check password and try again.',
+          'Incorrect email or password, check fields and try again.',
         );
       }
 
       const tokenArgs = { id: user._id, email: user.email };
       const accessToken = await tokenService.generateAccessToken(tokenArgs);
 
-      return new OkResponse('User role and access token provided', {
-        role: user.role,
+      return new OkResponse('Access token generated', {
+        user,
         accessToken,
       });
     } catch (err: any) {
       logger.error(err.message);
+
       if (err instanceof ValidationError) {
         throw new ValidationException(err.details[0].message);
       }
+
       throw err;
     }
   }
