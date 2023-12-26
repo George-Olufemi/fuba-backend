@@ -20,20 +20,18 @@ class VerifyEmailService {
       )) as JwtPayload;
 
       if (Date.now() > userToken.exp! * 1000) {
-        throw new BadRequestException(
-          'Token expired, kindly request for another verification link',
-        );
+        throw new BadRequestException('Verification link expired');
       }
 
       const user = await User.findOne({ email: userToken.email });
 
       if (!user) {
-        throw new NotFoundException('User associated with token does not exist.');
+        throw new NotFoundException('User not found');
       }
 
       if (user.isEmailVerified == true) {
         throw new ForbiddenException(
-          'The provided email address has been validated, kindly navigate to sign in route.',
+          'The provided email address has been validated, navigate to sign in route.',
         );
       }
 

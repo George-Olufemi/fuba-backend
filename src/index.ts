@@ -31,7 +31,10 @@ app.get('/api/health', (_req: Request, res: Response) => {
   return res.status(200).json(new OkResponse('Server is active'));
 });
 
-app.get('*', (_req: Request, res: Response) => {
+app.use('*', (_req: Request, res: Response) => {
+  return res
+    .status(404)
+    .json(new OkResponse('Route not found, check request query and re-try.'));
   res.status(404).json({
     status: false,
     error: 'Route not found',

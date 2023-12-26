@@ -18,7 +18,9 @@ class RegisterService {
   public async signUpAsTutor(payload: tutorsPayload): Promise<OkResponse> {
     try {
       await onboardingTutorSchema.validateAsync(payload);
+
       const user = await User.findOne({ email: payload.email });
+
       if (user) {
         throw new BadRequestException(
           'An account associated with the provided email address already exist.',
@@ -37,13 +39,15 @@ class RegisterService {
 
       if (newUser) {
         await this.sendVerificationMail(payload.email);
-        return new OkResponse('Check provided email inbox for verification mail');
+        return new OkResponse('Check inbox for verification mail');
       }
     } catch (err: any) {
       logger.error(err.message);
+
       if (err instanceof ValidationError) {
         throw new ValidationException(err.details[0].message);
       }
+
       throw err;
     }
   }
@@ -61,14 +65,17 @@ class RegisterService {
           role: Role.Learner,
         });
         await this.sendVerificationMail(payload.email);
-        return new OkResponse('Check provided email inbox for verification mail');
+        return new OkResponse('Check email inbox for verification mail');
       }
+
       throw new BadRequestException('The provided email address is already in use.');
     } catch (err: any) {
       logger.error(err.message);
+
       if (err instanceof ValidationError) {
         throw new ValidationException(err.details[0].message);
       }
+
       throw err;
     }
   }
