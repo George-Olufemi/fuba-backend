@@ -1,55 +1,46 @@
 import { Types } from 'mongoose';
 
 export enum Difficulty {
-    Beginner = 'Beginner',
-    Intermidate = 'Intermidate',
-    Advance = 'Advance'
+  Beginner = 'Beginner',
+  Intermidate = 'Intermidate',
+  Advance = 'Advance',
 }
 
-export enum Category {
-    Freelance = 'Freelance',
-    Development = 'Development',
-    Featured = 'Featured',
-    Blockchain = 'Blockchain',
-    Design = 'Design'
+export interface ISection {
+  title: string;
+  description: string;
+  thumbnail: string;
+  video_description: string;
+  video: string;
+  duration: string;
 }
 
-export interface IModule {
-    title: string;
-    description: string
-    thumbnail: string;
-    video_description: string;
-    video: string;
-    duration: string;
-}
-
-export interface ISection extends Document {
-    _id: Types.ObjectId;
-    modules: IModule[];
+export interface IModule extends Document {
+  _id: Types.ObjectId;
+  section: ISection[];
 }
 
 export interface ICourse extends Document {
-    _id: Types.ObjectId;
-    course_title: string;
-    course_description: string;
-    course_image: string;
-    difficulty: Difficulty;
-    rating: number;
-    number_of_enrolled: number;
-    course_category: Category [];
-    sections: ISection[];
-    user: Types.ObjectId;
+  _id: Types.ObjectId;
+  course_title: string;
+  course_description: string;
+  course_image: string;
+  difficulty: Difficulty;
+  rating: number;
+  number_of_enrolled: number;
+  course_category: string[];
+  modules: IModule[];
+  user: Types.ObjectId;
 }
 
 export interface createCoursePayload {
-    course_title: string;
-    course_description: string;
-    course_image: string;
-    difficulty: Difficulty;
-    course_category: Category[];
-    sections: ISection[];
+  course_title: string;
+  course_description: string;
+  course_image: string;
+  difficulty: Difficulty;
+  course_category: string[];
+  modules: IModule[];
 }
-
 
 // The Approach I am looking for
 
@@ -59,9 +50,9 @@ export interface createCoursePayload {
     image: 'path/to/course/image.jpg',
     difficulty: Difficulty.Beginner,
     categories: ['Programming', 'Web Development'],
-    sections: [
+    modules: [
         {
-            modules: [
+            sections: [
                 {
                     title: 'Module 1: Course Introduction',
                     description: 'Overview of the course content.',
@@ -69,14 +60,14 @@ export interface createCoursePayload {
                     duration: '3 hours',
                     video: 'path/to/video.mp4',
                 },
-                // More modules for Section 1
+                // More sections for module 1
             ],
         },
         {
-            modules: [
-                // Modules for Section 2
+            sections: [
+            
             ],
         },
-        // More sections
+        // More modules
     ],
 }; */

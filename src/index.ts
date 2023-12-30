@@ -1,15 +1,16 @@
 import express, { Express, Request, Response } from 'express';
 import * as dotenv from 'dotenv';
-dotenv.config();
 import morgan from 'morgan';
 import { OkResponse } from './helper';
 import mongoSanitize from 'express-mongo-sanitize';
+dotenv.config();
 
 const app: Express = express();
 
 /* Routes */
 import AuthRoute from './routes/auth.route';
 import AccountRoute from './routes/account.route';
+import CourseRoute from './routes/course.route';
 
 /* Express Middleware */
 app.use(express.json({ limit: '10kb' }));
@@ -21,6 +22,7 @@ app.use(mongoSanitize());
 
 app.use('/api/auth', AuthRoute);
 app.use('/api/account', AccountRoute);
+app.use('/api/course', CourseRoute);
 
 // Default Route
 app.get('/api', (_req: Request, res: Response) => {
@@ -35,11 +37,6 @@ app.use('*', (_req: Request, res: Response) => {
   return res
     .status(404)
     .json(new OkResponse('Route not found, check request query and re-try.'));
-  res.status(404).json({
-    status: false,
-    error: 'Route not found',
-    message: "The provided route can't be located, check request query and try again.",
-  });
 });
 
 export default app;
