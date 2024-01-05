@@ -52,7 +52,7 @@ export interface createCoursePayload {
     categories: ['Programming', 'Web Development'],
     modules: [
         {
-            sections: [
+            section: [
                 {
                     title: 'Module 1: Course Introduction',
                     description: 'Overview of the course content.',
@@ -64,7 +64,7 @@ export interface createCoursePayload {
             ],
         },
         {
-            sections: [
+            section: [
             
             ],
         },
