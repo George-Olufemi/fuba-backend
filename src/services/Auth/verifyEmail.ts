@@ -40,6 +40,7 @@ class VerifyEmailService {
       return true;
     } catch (err: any) {
       logger.error(err.message);
+
       if (err instanceof ValidationError) {
         throw new ValidationException(err.details[0].message);
       }
