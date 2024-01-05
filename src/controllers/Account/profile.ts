@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import CustomErrorHandler from '../../helper/custom-error-handler';
-import ProfileService from '../../services/Account/profile.service';
+import ProfileService from '../../services/Account/profile';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 const profileService: ProfileService = new ProfileService();

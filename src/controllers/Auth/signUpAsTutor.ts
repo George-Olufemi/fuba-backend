@@ -3,14 +3,14 @@ import Cloudinary from '../../helper/cloudinary';
 import { ForbiddenException } from '../../helper';
 import CustomErrorHandler from '../../helper/custom-error-handler';
 import Utils from '../../utils/utils';
-import RegisterService from '../../services/Auth/register.service';
+import SignUpAsTutorService from '../../services/Auth/signUpAsTutor';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 const utilsService: Utils = new Utils();
 const cloudinaryService: Cloudinary = new Cloudinary();
-const registerService: RegisterService = new RegisterService();
+const signUpAsTutorService: SignUpAsTutorService = new SignUpAsTutorService();
 
-class RegisterController {
+class SignUpAsTutorController {
   public async onboardingTutor(req: Request, res: Response) {
     try {
       let profileImgUrl: string;
@@ -42,16 +42,7 @@ class RegisterController {
         profileImgUrl = req.body.picture;
       }
 
-      const response = await registerService.signUpAsTutor(req.body);
-      return res.status(201).json(response);
-    } catch (err: any) {
-      return await customErrorHandler.handleCustomError(err, res);
-    }
-  }
-
-  public async onboardingLearner(req: Request, res: Response) {
-    try {
-      const response = await registerService.signUpAsLearner(req.body);
+      const response = await signUpAsTutorService.signUpAsTutor(req.body);
       return res.status(201).json(response);
     } catch (err: any) {
       return await customErrorHandler.handleCustomError(err, res);
@@ -59,4 +50,4 @@ class RegisterController {
   }
 }
 
-export default RegisterController;
+export default SignUpAsTutorController;

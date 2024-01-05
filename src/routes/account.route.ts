@@ -1,7 +1,7 @@
 import express from 'express';
 
 import AuthMiddleware from '../middlewares/auth.middleware';
-import ProfileController from '../controllers/Account/profile.controller';
+import ProfileController from '../controllers/Account/profile';
 
 const router = express.Router();
 
