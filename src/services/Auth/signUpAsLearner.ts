@@ -50,7 +50,7 @@ class SignUpAsLearnerService {
     const sendMail = await emailHandler.sendVerificationMail(email);
     if (!sendMail) {
       throw new BadRequestException(
-        'An error occured with our mailing service, kindly try again later',
+        'An error occurred with our mailing service, kindly try again later',
       );
     }
   }

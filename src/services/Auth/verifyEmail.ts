@@ -35,11 +35,7 @@ class VerifyEmailService {
         );
       }
 
-      await User.findOneAndUpdate(
-        { email: userToken.email },
-        { isEmailVerified: true },
-        { new: true },
-      );
+      await User.findOneAndUpdate({ email: userToken.email }, { isEmailVerified: true });
 
       return true;
     } catch (err: any) {
