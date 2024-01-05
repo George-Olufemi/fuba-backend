@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import CustomErrorHandler from '../../helper/custom-error-handler';
-import VerifyEmailService from '../../services/Auth/verifyEmail.service';
+import VerifyEmailService from '../../services/Auth/verifyEmail';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 const verifyEmailService: VerifyEmailService = new VerifyEmailService();

@@ -1,3 +1,4 @@
-export * from './Auth/signin.service';
-export * from './Auth/verifyEmail.service';
-export * from './Auth/register.service';
+export * from './Auth/signin';
+export * from './Auth/verifyEmail';
+export * from './Auth/signUpAsLearner';
+export * from './Auth/signUpAsTutor';

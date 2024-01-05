@@ -4,6 +4,7 @@ dotenv.config();
 import morgan from 'morgan';
 import { OkResponse } from './helper';
 import mongoSanitize from 'express-mongo-sanitize';
+import cors from 'cors';
 
 const app: Express = express();
 
@@ -18,6 +19,14 @@ app.use(morgan('dev'));
 
 /* NoSQL injection middleware */
 app.use(mongoSanitize());
+
+/* CORS Config */
+app.use(
+  cors({
+    origin: '*',
+    credentials: true,
+  }),
+);
 
 app.use('/api/auth', AuthRoute);
 app.use('/api/account', AccountRoute);
@@ -35,11 +44,6 @@ app.use('*', (_req: Request, res: Response) => {
   return res
     .status(404)
     .json(new OkResponse('Route not found, check request query and re-try.'));
-  res.status(404).json({
-    status: false,
-    error: 'Route not found',
-    message: "The provided route can't be located, check request query and try again.",
-  });
 });
 
 export default app;
