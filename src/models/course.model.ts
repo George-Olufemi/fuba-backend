@@ -1,15 +1,14 @@
 import mongoose, { Schema } from 'mongoose';
 import { Difficulty, ICourse, IModule, ISection } from '../interface';
 
-const SectionSchema = new Schema<ISection>({
+const SectionSchema: Schema<ISection> = new Schema<ISection>({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  thumbnail: { type: String, required: true },
   duration: { type: String, required: true },
   video: { type: Schema.Types.Mixed, required: true },
 });
 
-const ModuleSchema = new Schema<IModule>({
+const ModuleSchema: Schema<IModule> = new Schema<IModule>({
   section: {
     type: [SectionSchema],
     default: null,

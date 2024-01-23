@@ -1,13 +1,13 @@
 import express from 'express';
 
-import AuthMiddleware from '../middlewares/auth.middleware';
+import { ProtectMiddleware } from '../middlewares';
 import ProfileController from '../controllers/Account/profile.controller';
 
 const router = express.Router();
 
-const authMiddleware: AuthMiddleware = new AuthMiddleware();
+const protectMiddleware: ProtectMiddleware = new ProtectMiddleware();
 const profileController: ProfileController = new ProfileController();
 
-router.get('/profile', authMiddleware.authorize, profileController.getProfileInfo);
+router.get('/profile', protectMiddleware.authorize, profileController.getProfileInfo);
 
 export default router;

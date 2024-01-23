@@ -6,7 +6,7 @@ export const createCourseSchema = joi.object({
   course_description: joi.string().required().trim(),
   course_image: joi.string().required(),
   difficulty: joi.string().valid(...Object.values(Difficulty)),
-  course_category: joi.array().items(joi.string()).required(),
+  course_category: joi.array().items(joi.string().lowercase()).required(),
   modules: joi.array().items(
     joi.object({
       section: joi

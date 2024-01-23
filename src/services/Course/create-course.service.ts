@@ -6,7 +6,7 @@ import { Types } from 'mongoose';
 import { createCourseSchema } from '../../validations';
 import { createCoursePayload } from '../../interface';
 
-class CreateCourseService {
+export class CreateCourseService {
   public async createCourse(userId: Types.ObjectId, payload: createCoursePayload) {
     const user = await User.findById({ _id: userId });
 
@@ -37,5 +37,3 @@ class CreateCourseService {
     }
   }
 }
-
-export default CreateCourseService;

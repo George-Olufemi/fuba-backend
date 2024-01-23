@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import Cloudinary from '../../helper/cloudinary';
+import { CloudinaryService } from '../../helper/cloudinary';
 import CustomErrorHandler from '../../helper/custom-error-handler';
-import CreateCourseService from '../../services/Course/create-course.service';
+import { CreateCourseService } from '../../services';
 import { ForbiddenException } from '../../helper';
 import Utils from '../../utils/utils';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
-const cloudinaryService: Cloudinary = new Cloudinary();
+const cloudinaryService: CloudinaryService = new CloudinaryService();
 const createCourseService: CreateCourseService = new CreateCourseService();
 const utilsService: Utils = new Utils();
 
-class CreateCourseController {
+export class CreateCourseController {
   // const allowedVideoTypes: string[] = ['video/mp4', 'video/mpeg', 'video/quicktime'];
 
   public async createCourse(req: Request, res: Response) {
@@ -20,9 +20,12 @@ class CreateCourseController {
       if (req.body.course_image) {
         await this.handleImageUpload(req);
       }
-      if (req.body.modules) {
-        await this.handleThumbnailUpload(req);
+
+      // Check if videos are provided and handle the upload
+      if (req.body.modules && req.body.modules.length > 0) {
+        req.body.modules = await this.handleVideoUploads(req.body.modules);
       }
+
       const response = await createCourseService.createCourse(userId, req.body);
       return res.status(201).json(response);
     } catch (err: any) {
@@ -44,18 +47,15 @@ class CreateCourseController {
       );
     }
 
-    const cloudinaryResponse: any = await cloudinaryService.uploadImageToCloud(
-      filePath,
-      folder,
-      {
-        resource_type: 'image',
-        public_id: fileName,
-      },
-    );
+    const cloudinaryResponse: any = await cloudinaryService.upload(filePath, folder, {
+      resource_type: 'image',
+      public_id: fileName,
+    });
 
     req.body.course_image = cloudinaryResponse.secure_url;
   }
 
+  /*
   private async handleThumbnailUpload(req: Request) {
     const allowedThumbnailTypes: string[] = ['image/jpeg', 'image/jpg', 'image/png'];
 
@@ -91,11 +91,44 @@ class CreateCourseController {
       });
     }
   }
+   */
 
-  private async handleCourseVideoUpload() {}
+  private async handleVideoUploads(modules: any[]): Promise<any[]> {
+    const updatedModulesPromises = modules.map(async (module: any) => {
+      if (module.section && module.section.length > 0) {
+        const updatedSectionsPromises = module.section.map(async (section: any) => {
+          if (section.video) {
+            const fileName: string = await utilsService.randomFileName();
+            const folder: string = 'course_videos';
+            const filePath: Buffer = section.video.buffer;
+
+            const cloudinaryResponse: any = await cloudinaryService.upload(
+              filePath,
+              folder,
+              {
+                resource_type: 'video',
+                public_id: fileName,
+              },
+            );
+
+            // Update the video attribute at the section level
+            section.video = cloudinaryResponse.secure_url;
+          }
+
+          return section;
+        });
+
+        // Wait for all section updates within the module
+        module.section = await Promise.all(updatedSectionsPromises);
+      }
+
+      return module;
+    });
+
+    // Wait for all module updates
+    return Promise.all(updatedModulesPromises);
+  }
 }
-
-export default CreateCourseController;
 
 /**
  * I have to take the following into account

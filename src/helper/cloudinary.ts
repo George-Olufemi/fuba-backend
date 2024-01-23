@@ -12,12 +12,8 @@ interface uploadOptions {
   public_id: string;
 }
 
-class CloudinaryService {
-  public async uploadImageToCloud(
-    buffer: Buffer,
-    folder: string,
-    options: uploadOptions,
-  ) {
+export class CloudinaryService {
+  public async upload(buffer: Buffer, folder: string, options: uploadOptions) {
     options.public_id = folder + '/' + options.public_id;
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
@@ -31,9 +27,5 @@ class CloudinaryService {
     });
   }
 
-  public async uploadVideoToCloud() {}
-
   public async removeItemFromCloud() {}
 }
-
-export default CloudinaryService;

@@ -9,7 +9,6 @@ export enum Difficulty {
 export interface ISection {
   title: string;
   description: string;
-  thumbnail: string;
   video_description: string;
   video: string;
   duration: string;
@@ -65,7 +64,7 @@ export interface createCoursePayload {
         },
         {
             section: [
-            
+
             ],
         },
         // More modules
