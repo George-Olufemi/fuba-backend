@@ -1,10 +1,12 @@
 import express from 'express';
 import multer from 'multer';
 
-import SignUpAsTutorController from '../controllers/Auth/signUpAsTutor';
-import SignUpAsLearnerController from '../controllers/Auth/signUpAsLearner';
-import SignInController from '../controllers/Auth/signin';
-import VerifyEmailController from '../controllers/Auth/verifyEmail';
+import {
+  SignUpAsTutorController,
+  SignUpAsLearnerController,
+  SignInController,
+  VerifyEmailController,
+} from '../controllers';
 
 const router = express.Router();
 

@@ -14,7 +14,7 @@ import EmailHandlerService from '../../helper/email-handler';
 const utilsService: Utils = new Utils();
 const emailHandler: EmailHandlerService = new EmailHandlerService();
 
-class SignUpAsLearnerService {
+export class SignUpAsLearnerService {
   public async signUpAsLearner(payload: learnersPayload): Promise<OkResponse> {
     try {
       await onboardingLearnerSchema.validateAsync(payload);
@@ -55,5 +55,3 @@ class SignUpAsLearnerService {
     }
   }
 }
-
-export default SignUpAsLearnerService;

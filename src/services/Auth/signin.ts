@@ -16,7 +16,7 @@ import { ValidationError } from 'joi';
 const utilsService: Utils = new Utils();
 const tokenService: TokenService = new TokenService();
 
-class SignInService {
+export class SignInService {
   public async signIn(payload: signInPayload) {
     const omittedFields: string = '-createdAt -updatedAt -__v +password';
     try {
@@ -61,5 +61,3 @@ class SignInService {
     }
   }
 }
-
-export default SignInService;

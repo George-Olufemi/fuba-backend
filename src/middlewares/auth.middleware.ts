@@ -26,7 +26,7 @@ class AuthMiddleware {
           return res.status(Httpcode.UNAUTHORIZED).json({
             status: false,
             error: 'UNAUTHORIZED',
-            MIDIInputessage: 'User not found based on the provided token.',
+            message: 'User not found based on the provided token.',
           });
         }
         req.user = user;

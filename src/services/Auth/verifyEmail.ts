@@ -12,7 +12,7 @@ import { ValidationError } from 'joi';
 
 const tokenService: TokenService = new TokenService();
 
-class VerifyEmailService {
+export class VerifyEmailService {
   public async verifyUserEmail(token: string): Promise<boolean> {
     try {
       const userToken = (await tokenService.validateVerificationToken(
@@ -48,5 +48,3 @@ class VerifyEmailService {
     }
   }
 }
-
-export default VerifyEmailService;

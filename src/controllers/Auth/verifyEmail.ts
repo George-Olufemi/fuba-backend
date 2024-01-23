@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import CustomErrorHandler from '../../helper/custom-error-handler';
-import VerifyEmailService from '../../services/Auth/verifyEmail';
+import { VerifyEmailService } from '../../services';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 const verifyEmailService: VerifyEmailService = new VerifyEmailService();
 
-class VerifyEmailController {
+export class VerifyEmailController {
   public async verifyUserEmail(req: Request, res: Response) {
     const emailVerificationFailPlaceholder: string =
       'https://global.discourse-cdn.com/auth0/original/3X/9/e/9e5239a51247ab46defa4564bacdc319efb6fb5d.png';
@@ -23,5 +23,3 @@ class VerifyEmailController {
     }
   }
 }
-
-export default VerifyEmailController;

@@ -3,14 +3,14 @@ import Cloudinary from '../../helper/cloudinary';
 import { ForbiddenException } from '../../helper';
 import CustomErrorHandler from '../../helper/custom-error-handler';
 import Utils from '../../utils/utils';
-import SignUpAsTutorService from '../../services/Auth/signUpAsTutor';
+import { SignUpAsTutorService } from '../../services';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 const utilsService: Utils = new Utils();
 const cloudinaryService: Cloudinary = new Cloudinary();
 const signUpAsTutorService: SignUpAsTutorService = new SignUpAsTutorService();
 
-class SignUpAsTutorController {
+export class SignUpAsTutorController {
   public async onboardingTutor(req: Request, res: Response) {
     try {
       let profileImgUrl: string;
@@ -49,5 +49,3 @@ class SignUpAsTutorController {
     }
   }
 }
-
-export default SignUpAsTutorController;
