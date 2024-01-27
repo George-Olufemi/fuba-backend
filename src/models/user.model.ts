@@ -18,7 +18,9 @@ const UserSchema: Schema<IUser> = new Schema<IUser>(
       type: Boolean,
       default: false,
     },
-    picture: { type: String },
+    picture: {
+      type: String,
+    },
     role: {
       type: String,
       enum: Role,
@@ -27,6 +29,21 @@ const UserSchema: Schema<IUser> = new Schema<IUser>(
       type: String,
       required: true,
       select: false,
+    },
+    bio: {
+      type: String,
+    },
+    phoneNumber: {
+      type: String,
+    },
+    address: {
+      country: { type: String },
+      postalCode: { type: String },
+      state: { type: String },
+    },
+    course: {
+      type: Schema.Types.ObjectId,
+      ref: 'Course',
     },
   },
   { timestamps: true },

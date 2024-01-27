@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Cloudinary from '../../helper/cloudinary';
+import { CloudinaryService } from '../../helper/cloudinary';
 import { ForbiddenException } from '../../helper';
 import CustomErrorHandler from '../../helper/custom-error-handler';
 import Utils from '../../utils/utils';
@@ -7,7 +7,7 @@ import { SignUpAsTutorService } from '../../services';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 const utilsService: Utils = new Utils();
-const cloudinaryService: Cloudinary = new Cloudinary();
+const cloudinaryService: CloudinaryService = new CloudinaryService();
 const signUpAsTutorService: SignUpAsTutorService = new SignUpAsTutorService();
 
 export class SignUpAsTutorController {
@@ -28,14 +28,10 @@ export class SignUpAsTutorController {
           );
         }
 
-        const cloudinaryResponse: any = await cloudinaryService.uploadImageToCloud(
-          filePath,
-          folder,
-          {
-            resource_type: 'image',
-            public_id: fileName,
-          },
-        );
+        const cloudinaryResponse: any = await cloudinaryService.upload(filePath, folder, {
+          resource_type: 'image',
+          public_id: fileName,
+        });
 
         req.body.picture = cloudinaryResponse.secure_url;
       } else if (typeof req.body.picture === 'string') {
