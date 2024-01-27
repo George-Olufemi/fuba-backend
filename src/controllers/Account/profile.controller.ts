@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import CustomErrorHandler from '../../helper/custom-error-handler';
-import ProfileService from '../../services/Account/profile.service';
+import { ProfileService } from '../../services';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 const profileService: ProfileService = new ProfileService();
 
-class ProfileController {
+export class GetProfileController {
   public async getProfileInfo(req: Request, res: Response) {
     try {
       // @ts-ignore
@@ -17,5 +17,3 @@ class ProfileController {
     }
   }
 }
-
-export default ProfileController;
