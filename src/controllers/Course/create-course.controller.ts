@@ -17,14 +17,18 @@ export class CreateCourseController {
     // @ts-ignore
     const userId = req.user?._id;
     try {
+      /*
       if (req.body.course_image) {
         await this.handleImageUpload(req);
       }
+       */
 
       // Check if videos are provided and handle the upload
+      /*
       if (req.body.modules && req.body.modules.length > 0) {
         req.body.modules = await this.handleVideoUploads(req.body.modules);
       }
+       */
 
       const response = await createCourseService.createCourse(userId, req.body);
       return res.status(201).json(response);
@@ -133,7 +137,6 @@ export class CreateCourseController {
 /**
  * I have to take the following into account
  * The image for the course_image goes into a folder "course_images" in the cloud
- * The image for the thumbnails goes into a folder "thumbnails" in the cloud
  * The video file uploaded also goes into a folder "course_videos" in the cloud
  *
  * And for every upload of all this a secure url is generated that would be appended

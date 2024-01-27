@@ -11,7 +11,6 @@ export interface ISection {
   description: string;
   video_description: string;
   video: string;
-  duration: string;
 }
 
 export interface IModule extends Document {
@@ -25,7 +24,9 @@ export interface ICourse extends Document {
   course_description: string;
   course_image: string;
   difficulty: Difficulty;
+  duration: string;
   rating: number;
+  price: string;
   number_of_enrolled: number;
   course_category: string[];
   modules: IModule[];
@@ -37,6 +38,8 @@ export interface createCoursePayload {
   course_description: string;
   course_image: string;
   difficulty: Difficulty;
+  price: string;
+  duration: string;
   course_category: string[];
   modules: IModule[];
 }
@@ -47,6 +50,8 @@ export interface createCoursePayload {
     title: 'Your Course Title',
     description: 'Your course description.',
     image: 'path/to/course/image.jpg',
+    price: '19.99',
+     duration: '3 hours',
     difficulty: Difficulty.Beginner,
     categories: ['Programming', 'Web Development'],
     modules: [
@@ -55,8 +60,6 @@ export interface createCoursePayload {
                 {
                     title: 'Module 1: Course Introduction',
                     description: 'Overview of the course content.',
-                    thumbnail: 'path/to/thumbnail.jpg',
-                    duration: '3 hours',
                     video: 'path/to/video.mp4',
                 },
                 // More sections for module 1

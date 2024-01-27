@@ -4,7 +4,6 @@ import { Difficulty, ICourse, IModule, ISection } from '../interface';
 const SectionSchema: Schema<ISection> = new Schema<ISection>({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  duration: { type: String, required: true },
   video: { type: Schema.Types.Mixed, required: true },
 });
 
@@ -32,6 +31,14 @@ const CourseSchema: Schema<ICourse> = new Schema<ICourse>(
     difficulty: {
       type: String,
       enum: Difficulty,
+      required: true,
+    },
+    price: {
+      type: String,
+      required: true,
+    },
+    duration: {
+      type: String,
       required: true,
     },
     rating: {

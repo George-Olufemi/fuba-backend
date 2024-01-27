@@ -13,6 +13,7 @@ export class CreateCourseService {
     if (!user) throw new NotFoundException('User not found.');
 
     try {
+      console.log('Got here');
       await createCourseSchema.validateAsync(payload);
 
       const newCourse = await Course.create({
@@ -20,6 +21,8 @@ export class CreateCourseService {
         course_description: payload.course_description,
         course_image: payload.course_image,
         difficulty: payload.difficulty,
+        duration: payload.duration,
+        price: payload.price,
         course_category: payload.course_category,
         modules: payload.modules,
         user: userId,

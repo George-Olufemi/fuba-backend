@@ -11,6 +11,13 @@ export interface IUser extends Document {
   email: string;
   isEmailVerified: boolean;
   password: string;
+  bio: string;
+  phoneNumber: string;
+  address: {
+    country: string;
+    postalCode: string;
+    state: string;
+  };
   picture: string;
   role: Role;
   course: Types.ObjectId;
