@@ -4,6 +4,7 @@ dotenv.config();
 import morgan from 'morgan';
 import { OkResponse } from './helper';
 import mongoSanitize from 'express-mongo-sanitize';
+import cors from 'cors';
 
 const app: Express = express();
 
@@ -18,6 +19,14 @@ app.use(morgan('dev'));
 
 /* NoSQL injection middleware */
 app.use(mongoSanitize());
+
+/* CORS Config */
+app.use(
+  cors({
+    origin: '*',
+    credentials: true,
+  }),
+);
 
 app.use('/api/auth', AuthRoute);
 app.use('/api/account', AccountRoute);
