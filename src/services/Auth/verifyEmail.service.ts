@@ -12,7 +12,7 @@ import { ValidationError } from 'joi';
 
 const tokenService: TokenService = new TokenService();
 
-class VerifyEmailService {
+export class VerifyEmailService {
   public async verifyUserEmail(token: string): Promise<boolean> {
     try {
       const userToken = (await tokenService.validateVerificationToken(
@@ -35,15 +35,12 @@ class VerifyEmailService {
         );
       }
 
-      await User.findOneAndUpdate(
-        { email: userToken.email },
-        { isEmailVerified: true },
-        { new: true },
-      );
+      await User.findOneAndUpdate({ email: userToken.email }, { isEmailVerified: true });
 
       return true;
     } catch (err: any) {
       logger.error(err.message);
+
       if (err instanceof ValidationError) {
         throw new ValidationException(err.details[0].message);
       }
@@ -51,5 +48,3 @@ class VerifyEmailService {
     }
   }
 }
-
-export default VerifyEmailService;

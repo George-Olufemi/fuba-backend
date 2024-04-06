@@ -1,13 +1,23 @@
 import express from 'express';
 
-import AuthMiddleware from '../middlewares/auth.middleware';
-import ProfileController from '../controllers/Account/profile.controller';
+import { ProtectMiddleware } from '../middlewares';
+import { GetProfileController, EditProfileController } from '../controllers';
 
 const router = express.Router();
 
-const authMiddleware: AuthMiddleware = new AuthMiddleware();
-const profileController: ProfileController = new ProfileController();
+const protectMiddleware: ProtectMiddleware = new ProtectMiddleware();
+const getProfileInfoController: GetProfileController = new GetProfileController();
+const editProfileController: EditProfileController = new EditProfileController();
 
-router.get('/profile', authMiddleware.authorize, profileController.getProfileInfo);
+router.get(
+  '/profile',
+  protectMiddleware.authorize,
+  getProfileInfoController.getProfileInfo,
+);
+router.patch(
+  '/edit-profile',
+  protectMiddleware.authorize,
+  editProfileController.editProfile,
+);
 
 export default router;

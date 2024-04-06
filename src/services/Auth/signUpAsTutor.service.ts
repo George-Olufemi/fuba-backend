@@ -4,8 +4,8 @@ import {
   logger,
   ValidationException,
 } from '../../helper';
-import { tutorsPayload, Role, learnersPayload } from '../../interface';
-import { onboardingTutorSchema, onboardingLearnerSchema } from '../../validations';
+import { tutorsPayload, Role } from '../../interface';
+import { onboardingTutorSchema } from '../../validations';
 import User from '../../models/user.model';
 import Utils from '../../utils/utils';
 import { ValidationError } from 'joi';
@@ -14,7 +14,7 @@ import EmailHandlerService from '../../helper/email-handler';
 const utilsService: Utils = new Utils();
 const emailHandler: EmailHandlerService = new EmailHandlerService();
 
-class RegisterService {
+export class SignUpAsTutorService {
   public async signUpAsTutor(payload: tutorsPayload): Promise<OkResponse> {
     try {
       await onboardingTutorSchema.validateAsync(payload);
@@ -52,42 +52,12 @@ class RegisterService {
     }
   }
 
-  public async signUpAsLearner(payload: learnersPayload): Promise<OkResponse> {
-    try {
-      await onboardingLearnerSchema.validateAsync(payload);
-      const user = await User.findOne({ email: payload.email });
-      if (!user) {
-        const hashedPassword = await utilsService.hashPayload(payload.password);
-        await User.create({
-          fullName: payload.fullName,
-          email: payload.email,
-          password: hashedPassword,
-          role: Role.Learner,
-        });
-        await this.sendVerificationMail(payload.email);
-        return new OkResponse('Check email inbox for verification mail');
-      }
-
-      throw new BadRequestException('The provided email address is already in use.');
-    } catch (err: any) {
-      logger.error(err.message);
-
-      if (err instanceof ValidationError) {
-        throw new ValidationException(err.details[0].message);
-      }
-
-      throw err;
-    }
-  }
-
   private async sendVerificationMail(email: string): Promise<void> {
     const sendMail = await emailHandler.sendVerificationMail(email);
     if (!sendMail) {
       throw new BadRequestException(
-        'An error occured with our mailing service, kindly try again later',
+        'An error occurred with our mailing service, kindly try again later',
       );
     }
   }
 }
-
-export default RegisterService;

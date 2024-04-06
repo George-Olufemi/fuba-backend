@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import Cloudinary from '../../helper/cloudinary';
+import { CloudinaryService } from '../../helper/cloudinary';
 import { ForbiddenException } from '../../helper';
 import CustomErrorHandler from '../../helper/custom-error-handler';
 import Utils from '../../utils/utils';
-import RegisterService from '../../services/Auth/register.service';
+import { SignUpAsTutorService } from '../../services';
 
 const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 const utilsService: Utils = new Utils();
-const cloudinaryService: Cloudinary = new Cloudinary();
-const registerService: RegisterService = new RegisterService();
+const cloudinaryService: CloudinaryService = new CloudinaryService();
+const signUpAsTutorService: SignUpAsTutorService = new SignUpAsTutorService();
 
-class RegisterController {
+export class SignUpAsTutorController {
   public async onboardingTutor(req: Request, res: Response) {
     try {
       let profileImgUrl: string;
@@ -28,35 +28,20 @@ class RegisterController {
           );
         }
 
-        const cloudinaryResponse: any = await cloudinaryService.uploadImageToCloud(
-          filePath,
-          folder,
-          {
-            resource_type: 'image',
-            public_id: fileName,
-          },
-        );
+        const cloudinaryResponse: any = await cloudinaryService.upload(filePath, folder, {
+          resource_type: 'image',
+          public_id: fileName,
+        });
 
         req.body.picture = cloudinaryResponse.secure_url;
       } else if (typeof req.body.picture === 'string') {
         profileImgUrl = req.body.picture;
       }
 
-      const response = await registerService.signUpAsTutor(req.body);
-      return res.status(201).json(response);
-    } catch (err: any) {
-      return await customErrorHandler.handleCustomError(err, res);
-    }
-  }
-
-  public async onboardingLearner(req: Request, res: Response) {
-    try {
-      const response = await registerService.signUpAsLearner(req.body);
+      const response = await signUpAsTutorService.signUpAsTutor(req.body);
       return res.status(201).json(response);
     } catch (err: any) {
       return await customErrorHandler.handleCustomError(err, res);
     }
   }
 }
-
-export default RegisterController;
